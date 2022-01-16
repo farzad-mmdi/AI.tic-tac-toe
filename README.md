@@ -2,7 +2,7 @@
  graphical tic tac toe with both vs man and pc mode in pygame
 
 
- ok this tic tac toe obviously 
+ ok this is a tic tac toe obviously 
  including options:
  choosing if you want to be x or o 
  showing whos turn it is on the caption 
