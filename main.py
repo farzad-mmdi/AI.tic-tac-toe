@@ -15,14 +15,11 @@ transparent =          (0, 0 , 0 , 0)
 background  =          (62, 168, 50)
 x_color     =          (128, 17, 17)
 o_color     =          (33, 137, 207)
+background
 
-x_thickness = 20
-o_thickness = 20
-maxplayer = 'x'
-minplayer = 'o'
 
 pygame.init()
-display_width = 600
+display_width = 800
 display_height = display_width
 blocksize = display_height//3
 display = pygame.display.set_mode((display_width,display_height))
@@ -30,6 +27,10 @@ display.fill(white)
 pygame.display.set_caption('Tic-Tac-Toe')
 pygame.display.update()
 
+x_thickness = 20
+o_thickness = 20
+maxplayer = 'x'
+minplayer = 'o'
 
 
 def SetBoard():
@@ -48,6 +49,14 @@ def grid():
         pygame.draw.line(display, black, (0,y) , (display_width,y),3)
     pygame.display.update()
 
+
+def show_message(x,y,Text,textColor, textsize ,msgbackground):
+    font = pygame.font.Font('freesansbold.ttf',textsize)
+    text = font.render(Text,True,textColor,msgbackground)
+    textRect = text.get_rect()
+    textRect.center = (x,y)
+    display.blit(text , textRect)
+    pygame.display.update()
 
 
 def button(x,y,size,color,hcolor,Text,textColor,x2,Text2,b1clicked,b2clicked,button2=False):
@@ -97,7 +106,6 @@ def button(x,y,size,color,hcolor,Text,textColor,x2,Text2,b1clicked,b2clicked,but
             pygame.display.update() 
 
 
-
 def win_screen(winner,reverse=False):
     time.sleep(0.3)
     if winner == 1:
@@ -112,17 +120,6 @@ def win_screen(winner,reverse=False):
     button((display_width/10)*3.3 , (display_height/10)*8,30, black, green , 'Quit' , white , (display_width/10)*6.7 , 'NewGame' , quit , choose , True )                                   
 
 
-
-def show_message(x,y,Text,textColor, textsize ,msgbackground):
-    font = pygame.font.Font('freesansbold.ttf',textsize)
-    text = font.render(Text,True,textColor,msgbackground)
-    textRect = text.get_rect()
-    textRect.center = (x,y)
-    display.blit(text , textRect)
-    pygame.display.update()
-
-
-
 def move(row,col,player):
     if board[row][col] == 0:
         board[row][col] = player
@@ -132,9 +129,9 @@ def img_update(reverse=False):
     for row in range(len(board)):
         for col in range(len(board[row])):
             if board[row][col] == 'x':
-                draw_o(col,row) if reverse==True else draw_x(col,row)
+                draw_o(col,row) if reverse else draw_x(col,row)
             elif board[row][col] == 'o':
-                draw_x(col,row) if reverse==True else draw_o(col,row)    
+                draw_x(col,row) if reverse else draw_o(col,row)    
   
 
 def draw_x(row,col):
@@ -176,7 +173,6 @@ def o():
     display.fill(white)
     show_message(display_width/2, display_height/3 , 'Who goes first?', magenta , 50 , black)
     button((display_width/10)*3, (display_height/10)*8 , 30 ,white,magenta , 'Player' , black , (display_width/10)*7 , 'Computer', player_first_o , pc_first_o , True)
-
 
 
 def CheckWin():
@@ -261,7 +257,7 @@ def count_empties():
     return board[0].count(0) + board[1].count(0) + board[2].count(0)
 
 
-def game_loop(first_turn, vsman=False , reverse=False):
+def game_loop(first_turn, vsman=False , reverse_shape=False):
     time.sleep(0.2)
     if not vsman:
         if first_turn == 'pc':
@@ -274,9 +270,9 @@ def game_loop(first_turn, vsman=False , reverse=False):
                         pygame.display.set_caption('PC turn'.center(60,'#'))
                         AImove()
                         time.sleep(0.5)
-                        img_update(True if reverse==True else False)
+                        img_update(True if reverse_shape else False)
                         if CheckWin() != 2:
-                            win_screen(CheckWin(),True if reverse==True else False)
+                            win_screen(CheckWin(),True if reverse_shape else False)
                             
                     if count_empties() % 2 == 0:
                         pygame.display.set_caption('YOUR turn'.center(60,'#'))
@@ -284,9 +280,9 @@ def game_loop(first_turn, vsman=False , reverse=False):
                             x_ = pygame.mouse.get_pos()[0]
                             y_ = pygame.mouse.get_pos()[1]
                             move(y_//blocksize,x_//blocksize,'x')
-                            img_update(True if reverse==True else False)
+                            img_update(True if reverse_shape else False)
                             if CheckWin() != 2:
-                                win_screen(CheckWin(),True if reverse==True else False)
+                                win_screen(CheckWin(),True if reverse_shape else False)
 
         if first_turn == 'player':
             while True:
@@ -300,17 +296,17 @@ def game_loop(first_turn, vsman=False , reverse=False):
                             x_ = pygame.mouse.get_pos()[0]
                             y_ = pygame.mouse.get_pos()[1]
                             move(y_//blocksize,x_//blocksize,'x')
-                            img_update(True if reverse==True else False)
+                            img_update(True if reverse_shape else False)
                             if CheckWin() != 2:
-                                win_screen(CheckWin(),True if reverse==True else False)
+                                win_screen(CheckWin(),True if reverse_shape else False)
 
                     if count_empties() % 2 == 0:
                         pygame.display.set_caption('PC turn'.center(60,'#'))                        
                         AImove()
                         time.sleep(0.5)
-                        img_update(True if reverse==True else False)
+                        img_update(True if reverse_shape else False)
                         if CheckWin() != 2:
-                            win_screen(CheckWin(),True if reverse==True else False)
+                            win_screen(CheckWin(),True if reverse_shape else False)
                     
     if vsman:
         pygame.display.set_caption('o turn'.center(60,'#'))
@@ -329,7 +325,7 @@ def game_loop(first_turn, vsman=False , reverse=False):
                     img_update()
                     pygame.display.set_caption('x turn'.center(60,'#'))
                     if CheckWin() != 2:
-                        win_screen(CheckWin(),True if reverse==True else False)
+                        win_screen(CheckWin(),True if reverse_shape else False)
 
                 if count_empties() % 2 != 0:
                                 x_ = pygame.mouse.get_pos()[0]
@@ -338,7 +334,7 @@ def game_loop(first_turn, vsman=False , reverse=False):
                                 img_update()
                                 pygame.display.set_caption('o turn'.center(60,'#'))
                                 if CheckWin() != 2:
-                                    win_screen(CheckWin(),True if reverse==True else False)        
+                                    win_screen(CheckWin(),True if reverse_shape else False)        
 
 
 def runit():
