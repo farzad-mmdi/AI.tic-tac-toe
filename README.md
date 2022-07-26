@@ -1,8 +1,8 @@
 # AI.tic-tac-toe
- graphical tic tac toe with both vs man and pc mode in pygame
+ graphical tic tac toe with both vs man and pc mode(AI using minimax algorithm) in pygame
 
 
- ok this is a tic tac toe obviously 
+ this is a tic tac toe
  including options:
  choosing if you want to be x or o 
  showing whos turn it is on the caption 
